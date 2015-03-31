@@ -1,0 +1,14 @@
+TYPO3:
+  Flow:
+    error:
+      exceptionHandler:
+        className: 'Networkteam\SentryClient\Handler\ProductionExceptionHandler'
+
+    object:
+      excludeClasses:
+        'raven.*': ['.*']
+
+Networkteam:
+  SentryClient:
+    # The Sentry DSN
+    dsn: ''
