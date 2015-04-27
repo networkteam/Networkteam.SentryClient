@@ -6,6 +6,7 @@ namespace Networkteam\SentryClient\Handler;
  ***************************************************************/
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Core\Bootstrap;
 
 class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHandler {
 
@@ -13,10 +14,7 @@ class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHa
 	 * {@inheritdoc}
 	 */
 	public function echoExceptionWeb(\Exception $exception) {
-		$errorHandler = \TYPO3\Flow\Core\Bootstrap::$staticObjectManager->get('Networkteam\SentryClient\ErrorHandler');
-		if ($errorHandler !== NULL) {
-			$errorHandler->handleException($exception);
-		}
+		$this->sendExceptionToSentry($exception);
 		parent::echoExceptionWeb($exception);
 	}
 
@@ -24,11 +22,24 @@ class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHa
 	 * {@inheritdoc}
 	 */
 	public function echoExceptionCLI(\Exception $exception) {
-		$errorHandler = \TYPO3\Flow\Core\Bootstrap::$staticObjectManager->get('Networkteam\SentryClient\ErrorHandler');
-		if ($errorHandler !== NULL) {
-			$errorHandler->handleException($exception);
-		}
-		parent::echoExceptionWeb($exception);
+		$this->sendExceptionToSentry($exception);
+		parent::echoExceptionCLI($exception);
 	}
 
+	/**
+	 * @param \Exception $exception
+	 */
+	protected function sendExceptionToSentry(\Exception $exception) {
+		if (!Bootstrap::$staticObjectManager instanceof ObjectManagerInterface) {
+			return;
+		}
+		try {
+			$errorHandler = Bootstrap::$staticObjectManager->get('Networkteam\SentryClient\ErrorHandler');
+			if ($errorHandler !== NULL) {
+				$errorHandler->handleException($exception);
+			}
+		} catch (\Exception $exception) {
+			// Quick'n dirty workaround to catch exception with the error handler is called during compile time
+		}
+	}
 }
