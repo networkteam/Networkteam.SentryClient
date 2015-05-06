@@ -22,6 +22,15 @@ Add the following to your Settings.yaml and replace the DSN with your projects D
         # The Sentry DSN
         dsn: 'http://public_key:secret_key@your-sentry-server.com/project-id'
 
+For TYPO3 Flow only projects the aspects needs to be ignored by the compiler
+to achieve this add the sentry client aspect to the exclude classes.
+
+TYPO3:
+  Flow:
+    object:
+      excludeClasses:
+       'Networkteam.SentryClient': ['Aspect*']
+
 Development:
 ------------
 

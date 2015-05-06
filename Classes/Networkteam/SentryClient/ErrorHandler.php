@@ -15,7 +15,6 @@ use TYPO3\Party\Domain\Model\Person;
 class ErrorHandler {
 
 	/**
-	 * @Flow\Inject(setting="dsn", package="Networkteam.SentryClient")
 	 * @var string
 	 */
 	protected $dsn;
@@ -97,5 +96,12 @@ class ErrorHandler {
 		if ($userContext !== array()) {
 			$this->client->user_context($userContext);
 		}
+	}
+
+	/**
+	 * @param array $settings
+	 */
+	public function injectSettings(array $settings) {
+		$this->dsn = isset($settings['dsn']) ? $settings['dsn']: '';
 	}
 }
