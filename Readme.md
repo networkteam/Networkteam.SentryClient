@@ -3,9 +3,9 @@ Networkteam.SentryClient
 
 This is a Sentry client package for TYPO3 Flow and Neos.
 
-It's based on https://github.com/getsentry/raven-php
+It's based on https://github.com/getsentry/raven-php.
 
-Have a look at https://getsentry.com for more information about Sentry
+Have a look at https://getsentry.com for more information about Sentry.
 
 Installation:
 -------------
@@ -15,7 +15,7 @@ Installation:
 Configuration:
 --------------
 
-Add the following to your Settings.yaml and replace the DSN with your projects DSN
+Add the following to your Settings.yaml and replace the DSN with your project DSN:
 
     Networkteam:
       SentryClient:
@@ -34,4 +34,4 @@ to achieve this add the sentry client aspect to the exclude classes.
 Development:
 ------------
 
-This package is managed on GitHub. Feel free to get in touch at https://github.com/networkteam/Networkteam.SentryClient
+This package is managed on GitHub. Feel free to get in touch at https://github.com/networkteam/Networkteam.SentryClient.
