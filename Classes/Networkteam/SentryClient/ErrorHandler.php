@@ -104,4 +104,11 @@ class ErrorHandler {
 	public function injectSettings(array $settings) {
 		$this->dsn = isset($settings['dsn']) ? $settings['dsn']: '';
 	}
+
+	/**
+	 * @return \Raven_Client
+	 */
+	public function getClient() {
+		return $this->client;
+	}
 }
