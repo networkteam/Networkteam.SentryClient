@@ -15,21 +15,21 @@ Installation:
 Configuration:
 --------------
 
-Add the following to your Settings.yaml and replace the DSN with your project DSN:
+Add the following to your `Settings.yaml` and replace the DSN with your project DSN:
 
     Networkteam:
       SentryClient:
         # The Sentry DSN
         dsn: 'http://public_key:secret_key@your-sentry-server.com/project-id'
 
-For TYPO3 Flow only projects the aspects needs to be ignored by the compiler
-to achieve this add the sentry client aspect to the exclude classes.
+For non-Neos projects the TypoScript error handler aspect needs to be ignored by Flow. This can be achieved by
+adding the following exclude configuration to your settings:
 
     TYPO3:
       Flow:
         object:
           excludeClasses:
-           'Networkteam.SentryClient': ['Aspect*']
+           'Networkteam.SentryClient': ['Networkteam\\SentryClient\\Aspect\\TypoScriptHandlerAspect']
 
 Development:
 ------------
