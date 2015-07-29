@@ -1,6 +1,7 @@
 {
     "name": "networkteam/sentryclient",
     "type": "typo3-flow-package",
+    "license": "MIT",
     "description": "A sentry client for Flow and Neos",
     "require": {
         "typo3/flow": "*",

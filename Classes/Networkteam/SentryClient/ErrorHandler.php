@@ -1,10 +1,6 @@
 <?php
 namespace Networkteam\SentryClient;
 
-/***************************************************************
- *  (c) 2015 networkteam GmbH - all rights reserved
- ***************************************************************/
-
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Reflection\ObjectAccess;
 use TYPO3\Party\Domain\Model\Person;

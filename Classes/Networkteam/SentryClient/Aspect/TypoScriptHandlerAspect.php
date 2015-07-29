@@ -1,10 +1,6 @@
 <?php
 namespace Networkteam\SentryClient\Aspect;
 
-/***************************************************************
- *  (c) 2015 networkteam GmbH - all rights reserved
- ***************************************************************/
-
 use TYPO3\Flow\Annotations as Flow;
 
 /**

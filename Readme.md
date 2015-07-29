@@ -1,7 +1,7 @@
 Networkteam.SentryClient
 ========================
 
-This is a Sentry client package for TYPO3 Flow and Neos.
+This is a Sentry client package for the Flow framework and Neos CMS (http://www.neos.io).
 
 It's based on https://github.com/getsentry/raven-php.
 
@@ -15,7 +15,7 @@ Installation:
 Configuration:
 --------------
 
-Add the following to your `Settings.yaml` and replace the DSN with your project DSN:
+Add the following to your `Settings.yaml` and replace the `dsn` setting with your project DSN (API Keys in your Sentry project):
 
     Networkteam:
       SentryClient:
@@ -31,7 +31,18 @@ adding the following exclude configuration to your settings:
           excludeClasses:
            'Networkteam.SentryClient': ['Networkteam\\SentryClient\\Aspect\\TypoScriptHandlerAspect']
 
+Usage:
+------
+
+Sentry will log all exceptions that have the rendering option `logException` enabled. This can be enabled or disabled
+by status code or exception class according to the Flow configuration.
+
 Development:
 ------------
 
 This package is managed on GitHub. Feel free to get in touch at https://github.com/networkteam/Networkteam.SentryClient.
+
+License:
+--------
+
+See the [LICENSE](LICENSE.md) file for license rights and limitations (MIT).
