@@ -29,7 +29,7 @@ adding the following exclude configuration to your settings:
       Flow:
         object:
           excludeClasses:
-           'Networkteam.SentryClient': ['Networkteam\\SentryClient\\Aspect\\TypoScriptHandlerAspect']
+            'Networkteam.SentryClient': ['Networkteam\\SentryClient\\Aspect\\TypoScriptHandlerAspect']
 
 Usage:
 ------
