@@ -28,19 +28,28 @@ class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHa
 	}
 
 	/**
+	 * Send an exception to Sentry, but only if the "logException" rendering option is TRUE
+	 *
+	 * During compiletime there might be missing dependencies, so we need additional safeguards to
+	 * not cause errors.
+	 *
 	 * @param \Exception $exception
 	 */
 	protected function sendExceptionToSentry(\Exception $exception) {
 		if (!Bootstrap::$staticObjectManager instanceof ObjectManagerInterface) {
 			return;
 		}
-		try {
-			$errorHandler = Bootstrap::$staticObjectManager->get('Networkteam\SentryClient\ErrorHandler');
-			if ($errorHandler !== NULL) {
-				$errorHandler->handleException($exception);
+		$logException = isset($this->renderingOptions['logException']) && $this->renderingOptions['logException'];
+		if ($logException) {
+			try {
+				$errorHandler = Bootstrap::$staticObjectManager->get('Networkteam\SentryClient\ErrorHandler');
+				if ($errorHandler !== NULL) {
+					$errorHandler->handleException($exception);
+				}
+			} catch (\Exception $exception) {
+				// Quick'n dirty workaround to catch exception with the error handler is called during compile time
 			}
-		} catch (\Exception $exception) {
-			// Quick'n dirty workaround to catch exception with the error handler is called during compile time
 		}
 	}
+
 }
