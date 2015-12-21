@@ -10,7 +10,7 @@ class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHa
 	/**
 	 * {@inheritdoc}
 	 */
-	public function echoExceptionWeb(\Exception $exception) {
+	public function echoExceptionWeb($exception) {
 		$this->sendExceptionToSentry($exception);
 		parent::echoExceptionWeb($exception);
 	}
@@ -18,7 +18,7 @@ class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHa
 	/**
 	 * {@inheritdoc}
 	 */
-	public function echoExceptionCLI(\Exception $exception) {
+	public function echoExceptionCLI($exception) {
 		$this->sendExceptionToSentry($exception);
 		parent::echoExceptionCLI($exception);
 	}
@@ -29,9 +29,9 @@ class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHa
 	 * During compiletime there might be missing dependencies, so we need additional safeguards to
 	 * not cause errors.
 	 *
-	 * @param \Exception $exception
+	 * @param \Exception $exception \Exception or \Throwable
 	 */
-	protected function sendExceptionToSentry(\Exception $exception) {
+	protected function sendExceptionToSentry($exception) {
 		if (!Bootstrap::$staticObjectManager instanceof ObjectManagerInterface) {
 			return;
 		}
