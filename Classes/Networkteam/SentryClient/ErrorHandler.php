@@ -35,10 +35,14 @@ class ErrorHandler {
 	/**
 	 * Explicitly handle an exception, should be called from an exception handler (in Flow or TypoScript)
 	 *
-	 * @param \Exception $exception The exception to capture
+	 * @param object $exception The exception to capture
 	 * @param array $extraData Additional data passed to the Sentry sample
 	 */
-	public function handleException(\Exception $exception, array $extraData = array()) {
+	public function handleException($exception, array $extraData = array()) {
+		// TODO: Handle PHP7 Throwable
+		if (!$exception instanceof \Exception) {
+			return;
+		}
 		$this->setUserContext();
 
 		$tags = array('code' => $exception->getCode());
