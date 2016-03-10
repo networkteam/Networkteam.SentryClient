@@ -35,12 +35,9 @@ class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHa
 		if (!Bootstrap::$staticObjectManager instanceof ObjectManagerInterface) {
 			return;
 		}
-		// TODO: Handle PHP7 Throwable
-		if (!$exception instanceof \Exception) {
-			return;
-		}
-		$logException = isset($this->renderingOptions['logException']) && $this->renderingOptions['logException'];
-		if ($logException) {
+
+		$options = $this->resolveCustomRenderingOptions($exception);
+		if (isset($options['logException']) && $options['logException']) {
 			try {
 				$errorHandler = Bootstrap::$staticObjectManager->get('Networkteam\SentryClient\ErrorHandler');
 				if ($errorHandler !== NULL) {
