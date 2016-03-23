@@ -40,13 +40,18 @@ class ErrorHandler {
 	 */
 	public function handleException($exception, array $extraData = array()) {
 
-		if ($exception instanceof \Throwable) {
-			$mappedException = new \Exception($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
-			$extraData['file'] = $exception->getFile();
-			$extraData['line'] = $exception->getLine();
-			$extraData['traceString'] = $exception->getTraceAsString();
-			$extraData['original'] = 'Remapped from \Throwable';
-			$exception = $mappedException;
+		if (!$exception instanceof \Exception) {
+			if ($exception instanceof \Throwable) {
+				$mappedException = new \Exception($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
+				$extraData['file'] = $exception->getFile();
+				$extraData['line'] = $exception->getLine();
+				$extraData['traceString'] = $exception->getTraceAsString();
+				$extraData['original'] = 'Remapped from \Throwable';
+				$exception = $mappedException;
+			} else {
+				// can`t handle anything different from \Exception and \Throwable
+				return;
+			}
 		}
 
 		$this->setUserContext();

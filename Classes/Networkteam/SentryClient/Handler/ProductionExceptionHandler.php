@@ -10,7 +10,7 @@ class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHa
 	/**
 	 * {@inheritdoc}
 	 */
-	public function echoExceptionWeb(\Exception $exception) {
+	public function echoExceptionWeb($exception) {
 		$this->sendExceptionToSentry($exception);
 		parent::echoExceptionWeb($exception);
 	}
@@ -18,7 +18,7 @@ class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHa
 	/**
 	 * {@inheritdoc}
 	 */
-	public function echoExceptionCLI(\Exception  $exception) {
+	public function echoExceptionCLI($exception) {
 		$this->sendExceptionToSentry($exception);
 		parent::echoExceptionCLI($exception);
 	}
@@ -39,6 +39,7 @@ class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHa
 		$options = $this->resolveCustomRenderingOptions($exception);
 		if (isset($options['logException']) && $options['logException']) {
 			try {
+				/** @var \Networkteam\SentryClient\ErrorHandler $errorHandler */
 				$errorHandler = Bootstrap::$staticObjectManager->get('Networkteam\SentryClient\ErrorHandler');
 				if ($errorHandler !== NULL) {
 					$errorHandler->handleException($exception);
