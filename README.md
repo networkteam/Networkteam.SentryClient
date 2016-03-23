@@ -12,6 +12,8 @@ Installation:
 
     $ composer require networkteam/sentryclient
 
+Versions
+
 Configuration:
 --------------
 

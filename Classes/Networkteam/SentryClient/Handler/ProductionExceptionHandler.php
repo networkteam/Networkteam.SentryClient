@@ -10,7 +10,7 @@ class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHa
 	/**
 	 * {@inheritdoc}
 	 */
-	public function echoExceptionWeb($exception) {
+	public function echoExceptionWeb(\Exception $exception) {
 		$this->sendExceptionToSentry($exception);
 		parent::echoExceptionWeb($exception);
 	}
@@ -18,7 +18,7 @@ class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHa
 	/**
 	 * {@inheritdoc}
 	 */
-	public function echoExceptionCLI($exception) {
+	public function echoExceptionCLI(\Exception  $exception) {
 		$this->sendExceptionToSentry($exception);
 		parent::echoExceptionCLI($exception);
 	}

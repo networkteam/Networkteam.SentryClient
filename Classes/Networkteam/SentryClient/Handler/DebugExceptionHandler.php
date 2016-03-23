@@ -10,7 +10,7 @@ class DebugExceptionHandler extends \TYPO3\Flow\Error\DebugExceptionHandler {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function echoExceptionWeb($exception) {
+	public function echoExceptionWeb(\Exception $exception) {
 		$this->sendExceptionToSentry($exception);
 		parent::echoExceptionWeb($exception);
 	}
@@ -18,7 +18,7 @@ class DebugExceptionHandler extends \TYPO3\Flow\Error\DebugExceptionHandler {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function echoExceptionCLI($exception) {
+	public function echoExceptionCLI(\Exception $exception) {
 		$this->sendExceptionToSentry($exception);
 		parent::echoExceptionCLI($exception);
 	}
@@ -29,9 +29,9 @@ class DebugExceptionHandler extends \TYPO3\Flow\Error\DebugExceptionHandler {
 	 * During compiletime there might be missing dependencies, so we need additional safeguards to
 	 * not cause errors.
 	 *
-	 * @param object $exception \Exception or \Throwable
+	 * @param \Exception $exception \Exception
 	 */
-	protected function sendExceptionToSentry($exception) {
+	protected function sendExceptionToSentry(\Exception $exception) {
 		if (!Bootstrap::$staticObjectManager instanceof ObjectManagerInterface) {
 			return;
 		}
