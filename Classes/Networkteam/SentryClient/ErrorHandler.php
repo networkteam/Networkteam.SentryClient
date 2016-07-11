@@ -39,10 +39,21 @@ class ErrorHandler {
 	 * @param array $extraData Additional data passed to the Sentry sample
 	 */
 	public function handleException($exception, array $extraData = array()) {
-		// TODO: Handle PHP7 Throwable
+
 		if (!$exception instanceof \Exception) {
-			return;
+			if ($exception instanceof \Throwable) {
+				$mappedException = new \Exception($exception->getMessage(), $exception->getCode(), $exception->getPrevious());
+				$extraData['file'] = $exception->getFile();
+				$extraData['line'] = $exception->getLine();
+				$extraData['traceString'] = $exception->getTraceAsString();
+				$extraData['original'] = 'Remapped from \Throwable';
+				$exception = $mappedException;
+			} else {
+				// can`t handle anything different from \Exception and \Throwable
+				return;
+			}
 		}
+
 		$this->setUserContext();
 
 		$tags = array('code' => $exception->getCode());

@@ -12,6 +12,15 @@ Installation:
 
     $ composer require networkteam/sentryclient
 
+_Compatibility table for the sentry client_
+
+There was a failure in the versioning scheme for the client from 1.0.3 on. This is fixed with the 2.x and 3.x versions.
+
+|    Flow        |SentryClient |
+|----------------|-------------|
+|<2.3.9, <3.0.3  | 2.x, <1.0.3 |
+|>=2.3.9, >=3.0.3| 3.x, >1.0.3 |
+
 Configuration:
 --------------
 

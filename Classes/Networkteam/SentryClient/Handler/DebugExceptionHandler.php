@@ -29,18 +29,15 @@ class DebugExceptionHandler extends \TYPO3\Flow\Error\DebugExceptionHandler {
 	 * During compiletime there might be missing dependencies, so we need additional safeguards to
 	 * not cause errors.
 	 *
-	 * @param object $exception \Exception or \Throwable
+	 * @param \Exception $exception \Exception
 	 */
 	protected function sendExceptionToSentry($exception) {
 		if (!Bootstrap::$staticObjectManager instanceof ObjectManagerInterface) {
 			return;
 		}
-		// TODO: Handle PHP7 Throwable
-		if (!$exception instanceof \Exception) {
-			return;
-		}
-		$logException = isset($this->renderingOptions['logException']) && $this->renderingOptions['logException'];
-		if ($logException) {
+
+		$options = $this->resolveCustomRenderingOptions($exception);
+		if (isset($options['logException']) && $options['logException']) {
 			try {
 				$errorHandler = Bootstrap::$staticObjectManager->get('Networkteam\SentryClient\ErrorHandler');
 				if ($errorHandler !== NULL) {
