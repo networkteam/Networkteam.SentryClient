@@ -9,7 +9,7 @@ class Package extends BasePackage {
 	 * {@inheritdoc}
 	 */
 	public function boot(\TYPO3\Flow\Core\Bootstrap $bootstrap) {
-		require_once(FLOW_PATH_PACKAGES . '/Libraries/raven/raven/lib/Raven/Autoloader.php');
+		require_once(FLOW_PATH_PACKAGES . '/Libraries/sentry/sentry/lib/Raven/Autoloader.php');
 		\Raven_Autoloader::register();
 
 		$bootstrap->getSignalSlotDispatcher()->connect('TYPO3\Flow\Core\Booting\Sequence', 'afterInvokeStep', function($step, $runlevel) use($bootstrap) {
