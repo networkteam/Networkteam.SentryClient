@@ -6,7 +6,8 @@ TYPO3:
 
     object:
       excludeClasses:
-        'raven.*': ['.*']
+        'monolog.monolog': ['.*']
+        'sentry.sentry': ['.*']
 
 Networkteam:
   SentryClient:
