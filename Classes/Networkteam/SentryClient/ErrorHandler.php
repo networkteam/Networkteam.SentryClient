@@ -61,7 +61,11 @@ class ErrorHandler {
 			$extraData['referenceCode'] = $exception->getReferenceCode();
 		}
 
-		$this->client->captureException($exception, array('extra' => $extraData, 'tags' => $tags));
+		$this->client->captureException($exception, array(
+				'message' => $exception->getMessage(),
+				'extra' => $extraData,
+				'tags' => $tags)
+		);
 	}
 
 	/**
