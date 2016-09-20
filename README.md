@@ -39,6 +39,11 @@ adding the following exclude configuration to your settings:
         object:
           excludeClasses:
             'Networkteam.SentryClient': ['Networkteam\\SentryClient\\Aspect\\TypoScriptHandlerAspect']
+            
+For Flow Versions not ignoring external Packages by default (< 3.0.0) you also need to exclude the following packages from being reflected:
+
+    'monolog.monolog': ['.*']
+    'sentry.sentry': ['.*']            
 
 Usage:
 ------
