@@ -1,0 +1,3 @@
+Networkteam\SentryClient\Context\UserContextServiceInterface:
+  scope: singleton
+  className: Networkteam\SentryClient\Context\PartyUserContext
