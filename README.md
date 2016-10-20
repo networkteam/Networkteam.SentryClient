@@ -31,19 +31,6 @@ Add the following to your `Settings.yaml` and replace the `dsn` setting with you
         # The Sentry DSN
         dsn: 'http://public_key:secret_key@your-sentry-server.com/project-id'
 
-For non-Neos projects the TypoScript error handler aspect needs to be ignored by Flow. This can be achieved by
-adding the following exclude configuration to your settings:
-
-    TYPO3:
-      Flow:
-        object:
-          excludeClasses:
-            'Networkteam.SentryClient': ['Networkteam\\SentryClient\\Aspect\\TypoScriptHandlerAspect']
-
-Additionally if you do not use the TYPO3.Party Package in your Flow Application you need to exclude the following class too
-     
-     \Networkteam\SentryClient\User\PartyUserContext
-
 You can implement the `\Networkteam\SentryClient\User\UserContextServiceInterface` to pass your own user context 
 information to the logging. If you do not have the TYPO3.Party Package and don't want to implement your own 
 `UserContextService` you need to set the `\Networkteam\SentryClient\User\DummyUserContext` in the Objects.yaml like
