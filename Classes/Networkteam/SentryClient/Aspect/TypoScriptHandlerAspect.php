@@ -17,7 +17,7 @@ class TypoScriptHandlerAspect {
 	/**
 	 * Forward all exceptions that are handled in TypoScript rendering exception handlers to Sentry
 	 *
-	 * @Flow\After("within(TYPO3\TypoScript\Core\ExceptionHandlers\AbstractRenderingExceptionHandler) && method(.*->handle())")
+	 * @Flow\After("within(Neos\Fusion\Core\ExceptionHandlers\AbstractRenderingExceptionHandler) && method(.*->handle())")
 	 * @param \Neos\Flow\Aop\JoinPointInterface $joinPoint
 	 */
 	public function captureException(\Neos\Flow\Aop\JoinPointInterface $joinPoint) {
