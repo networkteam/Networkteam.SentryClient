@@ -22,6 +22,6 @@ class TypoScriptHandlerAspect {
 	 */
 	public function captureException(\Neos\Flow\Aop\JoinPointInterface $joinPoint) {
 		$exception = $joinPoint->getMethodArgument('exception');
-		$this->errorHandler->handleException($exception, array('typoScriptPath' => $joinPoint->getMethodArgument('typoScriptPath')));
+		$this->errorHandler->handleException($exception, array('fusionPath' => $joinPoint->getMethodArgument('fusionPath')));
 	}
 }
