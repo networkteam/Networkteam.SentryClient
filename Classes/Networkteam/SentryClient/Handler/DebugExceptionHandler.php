@@ -1,11 +1,11 @@
 <?php
 namespace Networkteam\SentryClient\Handler;
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Core\Bootstrap;
-use TYPO3\Flow\ObjectManagement\ObjectManagerInterface;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Core\Bootstrap;
+use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 
-class DebugExceptionHandler extends \TYPO3\Flow\Error\DebugExceptionHandler {
+class DebugExceptionHandler extends \Neos\Flow\Error\DebugExceptionHandler {
 
 	/**
 	 * {@inheritdoc}

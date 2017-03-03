@@ -1,5 +1,6 @@
-TYPO3:
+
+Neos:
   Flow:
     error:
       exceptionHandler:
-        className: 'Networkteam\SentryClient\Handler\DebugExceptionHandler'
+        className: Networkteam\SentryClient\Handler\DebugExceptionHandler

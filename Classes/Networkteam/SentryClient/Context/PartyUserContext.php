@@ -12,16 +12,16 @@ class PartyUserContext implements UserContextServiceInterface {
 	/**
 	 * Returns ContextData to be added to the sentry entry
 	 *
-	 * @param \TYPO3\Flow\Security\Context $securityContext
+	 * @param \Neos\Flow\Security\Context $securityContext
 	 * @return array
 	 */
-	public function getUserContext(\TYPO3\Flow\Security\Context $securityContext) {
+	public function getUserContext(\Neos\Flow\Security\Context $securityContext) {
 		$party = $securityContext->getParty();
 		$userContext = [];
 		if ($party instanceof Person && $party->getPrimaryElectronicAddress() !== NULL) {
 			$userContext['email'] = (string)$party->getPrimaryElectronicAddress();
-		} elseif ($party !== NULL && \TYPO3\Flow\Reflection\ObjectAccess::isPropertyGettable($party, 'emailAddress')) {
-			$userContext['email'] = (string)\TYPO3\Flow\Reflection\ObjectAccess::getProperty($party, 'emailAddress');
+		} elseif ($party !== NULL && \Neos\Flow\Reflection\ObjectAccess::isPropertyGettable($party, 'emailAddress')) {
+			$userContext['email'] = (string)\Neos\Flow\Reflection\ObjectAccess::getProperty($party, 'emailAddress');
 		}
 
 		return $userContext;
