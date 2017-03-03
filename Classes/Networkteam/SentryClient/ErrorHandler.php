@@ -2,7 +2,7 @@
 namespace Networkteam\SentryClient;
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Reflection\ObjectAccess;
+use Neos\Utility\ObjectAccess;
 
 /**
  * @Flow\Scope("singleton")

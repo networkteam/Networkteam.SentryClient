@@ -20,8 +20,8 @@ class PartyUserContext implements UserContextServiceInterface {
 		$userContext = [];
 		if ($party instanceof Person && $party->getPrimaryElectronicAddress() !== NULL) {
 			$userContext['email'] = (string)$party->getPrimaryElectronicAddress();
-		} elseif ($party !== NULL && \Neos\Flow\Reflection\ObjectAccess::isPropertyGettable($party, 'emailAddress')) {
-			$userContext['email'] = (string)\Neos\Flow\Reflection\ObjectAccess::getProperty($party, 'emailAddress');
+		} elseif ($party !== NULL && \Neos\Utility\ObjectAccess::isPropertyGettable($party, 'emailAddress')) {
+			$userContext['email'] = (string)\Neos\Utility\ObjectAccess::getProperty($party, 'emailAddress');
 		}
 
 		return $userContext;
