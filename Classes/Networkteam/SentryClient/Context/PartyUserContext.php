@@ -5,7 +5,7 @@ namespace Networkteam\SentryClient\Context;
  *  (c) 2016 networkteam GmbH - all rights reserved
  ***************************************************************/
 
-use TYPO3\Party\Domain\Model\Person;
+use Neos\Party\Domain\Model\Person;
 
 class PartyUserContext implements UserContextServiceInterface {
 
