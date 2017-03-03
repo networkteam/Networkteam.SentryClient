@@ -13,7 +13,7 @@ class Package extends BasePackage {
 		\Raven_Autoloader::register();
 
 		$bootstrap->getSignalSlotDispatcher()->connect('Neos\Flow\Core\Booting\Sequence', 'afterInvokeStep', function($step, $runlevel) use($bootstrap) {
-			if ($step->getIdentifier() === 'typo3.flow:objectmanagement:runtime') {
+			if ($step->getIdentifier() === 'neos.flow:objectmanagement:runtime') {
 				// This triggers the initializeObject method
 				$bootstrap->getObjectManager()->get('Networkteam\SentryClient\ErrorHandler');
 			}
