@@ -15,7 +15,7 @@ class CatchableViewHelperExceptionAspect {
 	protected $errorHandler;
 
 	/**
-	 * @Flow\AfterThrowing("within(TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper) && method(.*->render())")
+	 * @Flow\AfterThrowing("within(Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper) && method(.*->render())")
 	 * @param \Neos\Flow\Aop\JoinPoint $joinPoint
 	 */
 	public function catchException(\Neos\Flow\Aop\JoinPoint $joinPoint) {
