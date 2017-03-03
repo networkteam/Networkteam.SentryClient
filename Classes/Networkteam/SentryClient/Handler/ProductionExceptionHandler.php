@@ -3,7 +3,7 @@ namespace Networkteam\SentryClient\Handler;
 
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Core\Bootstrap;
-use TYPO3\Flow\Object\ObjectManagerInterface;
+use TYPO3\Flow\ObjectManagement\ObjectManagerInterface;
 
 class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHandler {
 
