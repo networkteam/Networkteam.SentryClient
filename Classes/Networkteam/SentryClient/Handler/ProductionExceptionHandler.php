@@ -1,11 +1,11 @@
 <?php
 namespace Networkteam\SentryClient\Handler;
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Core\Bootstrap;
-use TYPO3\Flow\Object\ObjectManagerInterface;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Core\Bootstrap;
+use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 
-class ProductionExceptionHandler extends \TYPO3\Flow\Error\ProductionExceptionHandler {
+class ProductionExceptionHandler extends \Neos\Flow\Error\ProductionExceptionHandler {
 
 	/**
 	 * {@inheritdoc}

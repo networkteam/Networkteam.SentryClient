@@ -1,15 +1,15 @@
-TYPO3:
-  Flow:
-    error:
-      exceptionHandler:
-        className: 'Networkteam\SentryClient\Handler\ProductionExceptionHandler'
-
-    object:
-      excludeClasses:
-        'monolog.monolog': ['.*']
-        'sentry.sentry': ['.*']
 
 Networkteam:
   SentryClient:
-    # The Sentry DSN
     dsn: ''
+Neos:
+  Flow:
+    error:
+      exceptionHandler:
+        className: Networkteam\SentryClient\Handler\ProductionExceptionHandler
+    object:
+      excludeClasses:
+        monolog.monolog:
+          - '.*'
+        sentry.sentry:
+          - '.*'

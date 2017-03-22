@@ -1,8 +1,8 @@
 <?php
 namespace Networkteam\SentryClient;
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Reflection\ObjectAccess;
+use Neos\Flow\Annotations as Flow;
+use Neos\Utility\ObjectAccess;
 
 /**
  * @Flow\Scope("singleton")
@@ -62,7 +62,7 @@ class ErrorHandler {
 		$this->setUserContext();
 
 		$tags = array('code' => $exception->getCode());
-		if ($exception instanceof \TYPO3\Flow\Exception) {
+		if ($exception instanceof \Neos\Flow\Exception) {
 			$extraData['referenceCode'] = $exception->getReferenceCode();
 		}
 
@@ -77,9 +77,9 @@ class ErrorHandler {
 	 * Set tags on the raven context
 	 */
 	protected function setTagsContext() {
-		$objectManager = \TYPO3\Flow\Core\Bootstrap::$staticObjectManager;
-		/** @var \TYPO3\Flow\Utility\Environment $environment */
-		$environment = $objectManager->get('TYPO3\Flow\Utility\Environment');
+		$objectManager = \Neos\Flow\Core\Bootstrap::$staticObjectManager;
+		/** @var \Neos\Flow\Utility\Environment $environment */
+		$environment = $objectManager->get('Neos\Flow\Utility\Environment');
 
 		$tags = array(
 			'php_version' => phpversion(),
@@ -94,9 +94,9 @@ class ErrorHandler {
 	 * Set user information on the raven context
 	 */
 	protected function setUserContext() {
-		$objectManager = \TYPO3\Flow\Core\Bootstrap::$staticObjectManager;
-		/** @var \TYPO3\Flow\Security\Context $securityContext */
-		$securityContext = $objectManager->get('TYPO3\Flow\Security\Context');
+		$objectManager = \Neos\Flow\Core\Bootstrap::$staticObjectManager;
+		/** @var \Neos\Flow\Security\Context $securityContext */
+		$securityContext = $objectManager->get('Neos\Flow\Security\Context');
 
 		$userContext = array();
 

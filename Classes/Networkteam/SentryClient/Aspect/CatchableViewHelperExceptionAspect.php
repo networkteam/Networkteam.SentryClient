@@ -1,7 +1,7 @@
 <?php
 namespace Networkteam\SentryClient\Aspect;
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * @Flow\Aspect
@@ -15,10 +15,10 @@ class CatchableViewHelperExceptionAspect {
 	protected $errorHandler;
 
 	/**
-	 * @Flow\AfterThrowing("within(TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper) && method(.*->render())")
-	 * @param \TYPO3\Flow\Aop\JoinPoint $joinPoint
+	 * @Flow\AfterThrowing("within(Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper) && method(.*->render())")
+	 * @param \Neos\Flow\Aop\JoinPoint $joinPoint
 	 */
-	public function catchException(\TYPO3\Flow\Aop\JoinPoint $joinPoint) {
+	public function catchException(\Neos\Flow\Aop\JoinPoint $joinPoint) {
 		$exception = $joinPoint->getException();
 		$this->errorHandler->handleException($exception);
 	}
