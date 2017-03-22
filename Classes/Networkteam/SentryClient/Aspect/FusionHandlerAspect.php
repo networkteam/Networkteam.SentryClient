@@ -6,7 +6,7 @@ use Neos\Flow\Annotations as Flow;
 /**
  * @Flow\Aspect
  */
-class TypoScriptHandlerAspect {
+class FusionHandlerAspect {
 
 	/**
 	 * @Flow\Inject
@@ -22,7 +22,7 @@ class TypoScriptHandlerAspect {
 	 */
 	public function captureException(\Neos\Flow\Aop\JoinPointInterface $joinPoint) {
 		$exception = $joinPoint->getMethodArgument('exception');
-		$args =$joinPoint->getMethodArguments();
+		$args = $joinPoint->getMethodArguments();
 		$fusionPath = isset($args['fusionPath']) ? $args['fusionPath'] : $args['typoScriptPath'];
 		$this->errorHandler->handleException($exception, array('fusionPath' => $fusionPath));
 	}
