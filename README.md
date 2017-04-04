@@ -41,6 +41,14 @@ information to the logging. If you do not have the TYPO3.Party Package and don't
 
 This will prevent any collection of user information except information that is available via the Flow SecurityContext.
 
+If you use the Package only on a Flow project you need to exclude the `FusionHandlerAspect` from proxy class building in your `Settings.yaml`
+
+    TYPO3:
+      Flow:
+        object:
+          excludeClasses:
+            'Networkteam.SentryClient': ['Networkteam\\SentryClient\\Aspect\\FusionHandlerAspect']
+
 Usage:
 ------
 
