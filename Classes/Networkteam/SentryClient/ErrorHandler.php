@@ -44,6 +44,9 @@ class ErrorHandler {
 	 * @param array $extraData Additional data passed to the Sentry sample
 	 */
 	public function handleException($exception, array $extraData = array()) {
+		if (!$this->client instanceof \Raven_Client) {
+			return;
+		}
 
 		if (!$exception instanceof \Exception) {
 			if ($exception instanceof \Throwable) {
