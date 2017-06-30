@@ -7,9 +7,3 @@ Neos:
     error:
       exceptionHandler:
         className: Networkteam\SentryClient\Handler\ProductionExceptionHandler
-    object:
-      excludeClasses:
-        monolog.monolog:
-          - '.*'
-        sentry.sentry:
-          - '.*'
