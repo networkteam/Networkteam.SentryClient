@@ -1,11 +1,11 @@
 Networkteam.SentryClient
 ========================
 
-This is a Sentry client package for the Flow framework and Neos CMS (http://www.neos.io).
+This is a Sentry client package for the Flow framework and Neos CMS (https://www.neos.io).
 
-It's based on https://github.com/getsentry/raven-php.
+It's based on https://github.com/getsentry/sentry-php.
 
-Have a look at https://getsentry.com for more information about Sentry.
+Have a look at https://sentry.io for more information about Sentry.
 
 Installation:
 -------------
