@@ -2,7 +2,11 @@
 namespace Networkteam\SentryClient;
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 use Neos\Utility\ObjectAccess;
+use Neos\Flow\Reflection\ReflectionService;
+
+use Networkteam\SentryClient\ClientConfigurator;
 
 /**
  * @Flow\Scope("singleton")
@@ -26,15 +30,44 @@ class ErrorHandler {
 	protected $userContextService;
 
 	/**
-	 * Initialize the raven client and fatal error handler (shutdown function)
+	 * @Flow\Inject
+	 * @var ReflectionService
 	 */
-	public function initializeObject() {
+	protected $reflectionService;
+
+	/**
+	 * @Flow\Inject
+	 * @var ObjectManagerInterface
+	 */
+	protected $objectManager;
+
+	/**
+	 * Initialize/return the raven client and fatal error handler (shutdown function)
+	 *
+	 * @return null|\Raven_Client
+	 */
+	public function getClient() {
+		if (empty($this->dsn)) {
+			return null;
+		}
+
+		if (!empty($this->client)) {
+			return $this->client;
+		}
+
 		$client = new \Raven_Client($this->dsn);
-		$errorHandler = new \Raven_ErrorHandler($client, TRUE);
+		$errorHandler = new \Raven_ErrorHandler($client, true);
 		$errorHandler->registerShutdownFunction();
 		$this->client = $client;
 
 		$this->setTagsContext();
+
+		$clientConfiguratorImplementations = $this->reflectionService->getAllImplementationClassNamesForInterface(ClientConfigurator\ClientConfiguratorInterface::class);
+		foreach ($clientConfiguratorImplementations as $clientConfiguratorImplementationClassName) {
+			$this->objectManager->get($clientConfiguratorImplementationClassName)->configureClient($client);
+		}
+
+		return $this->client;
 	}
 
 	/**
@@ -44,7 +77,7 @@ class ErrorHandler {
 	 * @param array $extraData Additional data passed to the Sentry sample
 	 */
 	public function handleException($exception, array $extraData = array()) {
-		if (!$this->client instanceof \Raven_Client) {
+		if (!$this->getClient() instanceof \Raven_Client) {
 			return;
 		}
 
@@ -69,7 +102,7 @@ class ErrorHandler {
 			$extraData['referenceCode'] = $exception->getReferenceCode();
 		}
 
-		$this->client->captureException($exception, array(
+		$this->getClient()->captureException($exception, array(
 				'message' => $exception->getMessage(),
 				'extra' => $extraData,
 				'tags' => $tags)
@@ -90,7 +123,7 @@ class ErrorHandler {
 			'flow_version' => FLOW_VERSION_BRANCH
 		);
 
-		$this->client->tags_context($tags);
+		$this->getClient()->tags_context($tags);
 	}
 
 	/**
@@ -115,7 +148,7 @@ class ErrorHandler {
 		}
 
 		if ($userContext !== array()) {
-			$this->client->user_context($userContext);
+			$this->getClient()->user_context($userContext);
 		}
 	}
 
@@ -124,12 +157,5 @@ class ErrorHandler {
 	 */
 	public function injectSettings(array $settings) {
 		$this->dsn = isset($settings['dsn']) ? $settings['dsn']: '';
-	}
-
-	/**
-	 * @return \Raven_Client
-	 */
-	public function getClient() {
-		return $this->client;
 	}
 }
