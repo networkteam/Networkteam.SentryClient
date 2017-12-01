@@ -1,6 +1,6 @@
 {
     "name": "networkteam/sentryclient",
-    "type": "typo3-flow-package",
+    "type": "neos-package",
     "license": "MIT",
     "description": "A sentry client for Flow and Neos",
     "require": {
@@ -8,8 +8,8 @@
         "sentry/sentry": "^1.2"
     },
     "autoload": {
-        "psr-0": {
-            "Networkteam\\SentryClient": "Classes"
+        "psr-4": {
+            "Networkteam\\SentryClient\\": "Classes"
         }
     },
     "extra": {
