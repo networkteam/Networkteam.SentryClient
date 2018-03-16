@@ -1,9 +1,36 @@
-
 Networkteam:
   SentryClient:
+
+    #
+    # Sentry DSN
+    #
+    # The DSN can be found in Sentry by navigating to [Project Name] -> Project Settings -> Client Keys (DSN).
+    #
     dsn: ''
+
 Neos:
   Flow:
+
     error:
+
       exceptionHandler:
+
         className: Networkteam\SentryClient\Handler\ProductionExceptionHandler
+
+        defaultRenderingOptions:
+          #
+          # Exceptions can be ignored for Sentry, but still be logged locally with "logException"
+          #
+          sentryClientIgnoreException: FALSE
+
+        renderingGroups:
+
+          authenticationRequiredExceptions:
+            matchingStatusCodes: [401]
+            options:
+              sentryClientIgnoreException: TRUE
+
+          accessDeniedExceptions:
+            matchingStatusCodes: [403]
+            options:
+              sentryClientIgnoreException: TRUE

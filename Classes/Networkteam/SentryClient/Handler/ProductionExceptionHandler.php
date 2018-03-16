@@ -37,7 +37,9 @@ class ProductionExceptionHandler extends \Neos\Flow\Error\ProductionExceptionHan
 		}
 
 		$options = $this->resolveCustomRenderingOptions($exception);
-		if (isset($options['logException']) && $options['logException']) {
+		$logException = isset($options['logException']) && $options['logException'];
+		$sentryClientIgnoreException = isset($options['sentryClientIgnoreException']) && $options['sentryClientIgnoreException'];
+		if ($logException && !$sentryClientIgnoreException) {
 			try {
 				/** @var \Networkteam\SentryClient\ErrorHandler $errorHandler */
 				$errorHandler = Bootstrap::$staticObjectManager->get('Networkteam\SentryClient\ErrorHandler');
