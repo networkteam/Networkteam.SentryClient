@@ -60,16 +60,16 @@ class ErrorHandler
 
         $this->setUserContext();
 
-        $tags = array('code' => $exception->getCode());
+        $tags = ['code' => $exception->getCode()];
         if ($exception instanceof \Neos\Flow\Exception) {
             $extraData['referenceCode'] = $exception->getReferenceCode();
         }
 
-        $this->client->captureException($exception, array(
+        $this->client->captureException($exception, [
                 'message' => $exception->getMessage(),
                 'extra' => $extraData,
                 'tags' => $tags
-            )
+            ]
         );
     }
 
@@ -81,11 +81,11 @@ class ErrorHandler
         $objectManager = Bootstrap::$staticObjectManager;
         $environment = $objectManager->get(Environment::class);
 
-        $tags = array(
+        $tags = [
             'php_version' => phpversion(),
             'flow_context' => (string)$environment->getContext(),
             'flow_version' => FLOW_VERSION_BRANCH
-        );
+        ];
 
         $this->client->tags_context($tags);
     }
@@ -98,7 +98,7 @@ class ErrorHandler
         $objectManager = Bootstrap::$staticObjectManager;
         $securityContext = $objectManager->get(SecurityContext::class);
 
-        $userContext = array();
+        $userContext = [];
 
         if ($securityContext->isInitialized()) {
             $account = $securityContext->getAccount();
@@ -111,7 +111,7 @@ class ErrorHandler
             }
         }
 
-        if ($userContext !== array()) {
+        if ($userContext !== []) {
             $this->client->user_context($userContext);
         }
     }
