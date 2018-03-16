@@ -37,7 +37,9 @@ class DebugExceptionHandler extends \Neos\Flow\Error\DebugExceptionHandler {
 		}
 
 		$options = $this->resolveCustomRenderingOptions($exception);
-		if (isset($options['logException']) && $options['logException']) {
+		$logException = isset($options['logException']) && $options['logException'];
+		$sentryClientIgnoreException = isset($options['sentryClientIgnoreException']) && $options['sentryClientIgnoreException'];
+		if ($logException && !$sentryClientIgnoreException) {
 			try {
 				$errorHandler = Bootstrap::$staticObjectManager->get('Networkteam\SentryClient\ErrorHandler');
 				if ($errorHandler !== NULL) {
