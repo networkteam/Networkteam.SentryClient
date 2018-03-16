@@ -1,13 +1,11 @@
 <?php
 namespace Networkteam\SentryClient\Context;
 
-/***************************************************************
- *  (c) 2016 networkteam GmbH - all rights reserved
- ***************************************************************/
-
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Security\Context;
 use Neos\Party\Domain\Model\Person;
 use Neos\Party\Domain\Repository\PartyRepository;
+use Neos\Utility\ObjectAccess;
 
 class PartyUserContext implements UserContextServiceInterface
 {
@@ -21,24 +19,24 @@ class PartyUserContext implements UserContextServiceInterface
     /**
      * Returns ContextData to be added to the sentry entry
      *
-     * @param \Neos\Flow\Security\Context $securityContext
+     * @param Context $securityContext
      * @return array
      */
-    public function getUserContext(\Neos\Flow\Security\Context $securityContext)
+    public function getUserContext(Context $securityContext)
     {
         $account = $securityContext->getAccount();
         if ($account) {
             $party = $this->partyRepository->findOneHavingAccount($account);
             $userContext = [];
-            if ($party instanceof Person && $party->getPrimaryElectronicAddress() !== NULL) {
+            if ($party instanceof Person && $party->getPrimaryElectronicAddress() !== null) {
                 $userContext['email'] = (string)$party->getPrimaryElectronicAddress();
-            } elseif ($party !== NULL && \Neos\Utility\ObjectAccess::isPropertyGettable($party, 'emailAddress')) {
-                $userContext['email'] = (string)\Neos\Utility\ObjectAccess::getProperty($party, 'emailAddress');
+            } elseif ($party !== null && ObjectAccess::isPropertyGettable($party, 'emailAddress')) {
+                $userContext['email'] = (string)ObjectAccess::getProperty($party, 'emailAddress');
             }
 
             return $userContext;
         }
 
         return [];
-	}
+    }
 }

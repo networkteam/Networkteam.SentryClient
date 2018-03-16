@@ -21,16 +21,16 @@ Neos:
           #
           # Exceptions can be ignored for Sentry, but still be logged locally with "logException"
           #
-          sentryClientIgnoreException: FALSE
+          sentryClientIgnoreException: false
 
         renderingGroups:
 
           authenticationRequiredExceptions:
             matchingStatusCodes: [401]
             options:
-              sentryClientIgnoreException: TRUE
+              sentryClientIgnoreException: true
 
           accessDeniedExceptions:
             matchingStatusCodes: [403]
             options:
-              sentryClientIgnoreException: TRUE
+              sentryClientIgnoreException: true
