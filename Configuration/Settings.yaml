@@ -13,3 +13,4 @@ Networkteam:
   SentryClient:
     # The Sentry DSN
     dsn: ''
+    release: '%env:FLOW_RELEASE%'
