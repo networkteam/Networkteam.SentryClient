@@ -1,12 +1,12 @@
 <?php
 namespace Networkteam\SentryClient\Handler;
 
-use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Core\Bootstrap;
+use Neos\Flow\Error\ProductionExceptionHandler as ProductionExceptionHandlerBase;
 use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 use Networkteam\SentryClient\ErrorHandler;
 
-class ProductionExceptionHandler extends \Neos\Flow\Error\ProductionExceptionHandler
+class ProductionExceptionHandler extends ProductionExceptionHandlerBase
 {
 
     /**
@@ -21,7 +21,7 @@ class ProductionExceptionHandler extends \Neos\Flow\Error\ProductionExceptionHan
     /**
      * {@inheritdoc}
      */
-    public function echoExceptionCLI($exception)
+    public function echoExceptionCLI(\Throwable $exception)
     {
         $this->sendExceptionToSentry($exception);
         parent::echoExceptionCLI($exception);
