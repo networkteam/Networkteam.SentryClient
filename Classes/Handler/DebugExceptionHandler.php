@@ -1,12 +1,12 @@
 <?php
 namespace Networkteam\SentryClient\Handler;
 
-use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Core\Bootstrap;
+use Neos\Flow\Error\DebugExceptionHandler as DebugExceptionHandlerBase;
 use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 use Networkteam\SentryClient\ErrorHandler;
 
-class DebugExceptionHandler extends \Neos\Flow\Error\DebugExceptionHandler
+class DebugExceptionHandler extends DebugExceptionHandlerBase
 {
 
     /**
@@ -21,7 +21,7 @@ class DebugExceptionHandler extends \Neos\Flow\Error\DebugExceptionHandler
     /**
      * {@inheritdoc}
      */
-    public function echoExceptionCLI($exception)
+    public function echoExceptionCLI(\Throwable $exception)
     {
         $this->sendExceptionToSentry($exception);
         parent::echoExceptionCLI($exception);
