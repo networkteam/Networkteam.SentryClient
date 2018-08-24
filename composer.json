@@ -2,7 +2,7 @@
     "name": "networkteam/sentryclient",
     "type": "neos-package",
     "license": "MIT",
-    "description": "A sentry client for Flow and Neos",
+    "description": "A sentry client for the Flow framework",
     "require": {
         "php": "~7.0",
         "neos/flow": ">=5.0.0",
