@@ -1,7 +1,8 @@
 Networkteam.SentryClient
 ========================
 
-This is a Sentry client package for the Flow framework and Neos CMS (https://www.neos.io).
+This is a Sentry client package for the Flow framework. If you want to use this package with [Neos CMS](https://www.neos.io/) please use
+[Networkteam.Neos.SentryClient](https://github.com/networkteam/Networkteam.Neos.SentryClient) instead.
 
 It's based on https://github.com/getsentry/sentry-php.
 
