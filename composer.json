@@ -4,7 +4,7 @@
     "license": "MIT",
     "description": "A sentry client for Flow and Neos",
     "require": {
-        "typo3/flow": ">=2.3.9 <=2.3.12 || >=3.0.3",
+        "typo3/flow": "~2.3.9 || ^3.0.3",
         "sentry/sentry": "^1.2"
     },
     "autoload": {
