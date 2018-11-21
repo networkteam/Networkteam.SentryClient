@@ -1,6 +1,7 @@
 <?php
 namespace Networkteam\SentryClient;
 
+use Jenssegers\Agent\Agent;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Core\Bootstrap;
 use Neos\Flow\Security\Context as SecurityContext;
@@ -23,6 +24,11 @@ class ErrorHandler
     protected $client;
 
     /**
+     * @var Agent
+     */
+    protected $agent;
+
+    /**
      * @Flow\Inject
      * @var \Networkteam\SentryClient\Context\UserContextServiceInterface
      */
@@ -37,6 +43,7 @@ class ErrorHandler
         $errorHandler = new \Raven_ErrorHandler($client, true);
         $errorHandler->registerShutdownFunction();
         $this->client = $client;
+        $this->agent = new Agent();
 
         $this->setTagsContext();
     }
@@ -65,12 +72,38 @@ class ErrorHandler
             $extraData['referenceCode'] = $exception->getReferenceCode();
         }
 
-        $this->client->captureException($exception, [
-                'message' => $exception->getMessage(),
-                'extra' => $extraData,
-                'tags' => $tags
+        $data = [
+            'message' => $exception->getMessage(),
+            'extra' => $extraData,
+            'tags' => $tags,
+        ];
+        $data = array_merge_recursive($data, $this->getBrowserContext(), $this->getOsContext());
+
+        $this->client->captureException($exception, $data);
+    }
+
+    protected function getBrowserContext(): array
+    {
+        return [
+            'contexts' => [
+                'browser' => [
+                    'name' => $this->agent->browser(),
+                    'version' => $this->agent->version($this->agent->browser())
+                ]
             ]
-        );
+        ];
+    }
+
+    protected function getOsContext(): array
+    {
+        return [
+            'contexts' => [
+                'os' => [
+                    'name' => $this->agent->platform(),
+                    'version' => $this->agent->version($this->agent->platform())
+                ]
+            ]
+        ];
     }
 
     /**
