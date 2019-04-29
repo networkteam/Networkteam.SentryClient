@@ -8,6 +8,11 @@ Networkteam:
     #
     dsn: ''
 
+    #
+    # Release to use for Sentry client
+    #
+    release: '%env:FLOW_RELEASE%'
+
 Neos:
   Flow:
 
