@@ -14,9 +14,9 @@ class ErrorHandler {
 	 */
 	protected $dsn;
 
-    /**
-     * @var string
-     */
+	/**
+	 * @var string
+	 */
 	protected $release;
 
 	/**
@@ -121,16 +121,16 @@ class ErrorHandler {
 		}
 
 		if ($this->release !== '') {
-            $this->client->setRelease($this->release);
-        }
+			$this->client->setRelease($this->release);
+		}
 	}
 
 	/**
 	 * @param array $settings
 	 */
 	public function injectSettings(array $settings) {
-		$this->dsn = isset($settings['dsn']) ? $settings['dsn']: '';
-		$this->release = isset($settings['release']) ? $settings['release']: '';
+		$this->dsn = isset($settings['dsn']) ? $settings['dsn'] : '';
+		$this->release = isset($settings['release']) ? $settings['release'] : '';
 	}
 
 	/**
