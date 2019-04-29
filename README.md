@@ -41,6 +41,16 @@ information to the logging. If you do not have the TYPO3.Party Package and don't
 
 This will prevent any collection of user information except information that is available via the Flow SecurityContext.
 
+Release tracking:
+-----------------
+
+A _Release_ can be passed to the Sentry client with the environment variable `FLOW_RELEASE` or by setting the value
+in a `Settings.yaml`:
+
+    Networkteam:
+      SentryClient:
+        release: '1.2.3-alpha1'
+
 Usage:
 ------
 

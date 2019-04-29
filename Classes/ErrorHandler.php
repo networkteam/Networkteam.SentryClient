@@ -18,6 +18,11 @@ class ErrorHandler
     protected $dsn;
 
     /**
+     * @var string
+     */
+    protected $release;
+
+    /**
      * @var \Raven_Client
      */
     protected $client;
@@ -114,6 +119,10 @@ class ErrorHandler
         if ($userContext !== []) {
             $this->client->user_context($userContext);
         }
+
+        if ($this->release !== '') {
+            $this->client->setRelease($this->release);
+        }
     }
 
     /**
@@ -122,6 +131,7 @@ class ErrorHandler
     public function injectSettings(array $settings)
     {
         $this->dsn = $settings['dsn'] ?? '';
+        $this->release = isset($settings['release']) ? $settings['release'] : '';
     }
 
     /**
