@@ -1,4 +1,5 @@
 <?php
+
 namespace Networkteam\SentryClient;
 
 use Jenssegers\Agent\Agent;
@@ -6,6 +7,11 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Core\Bootstrap;
 use Neos\Flow\Security\Context as SecurityContext;
 use Neos\Flow\Utility\Environment;
+use function Sentry\captureException;
+use function Sentry\configureScope;
+use function Sentry\init as initSentry;
+use Sentry\State\Hub;
+use Sentry\State\Scope;
 
 /**
  * @Flow\Scope("singleton")
@@ -24,11 +30,6 @@ class ErrorHandler
     protected $release;
 
     /**
-     * @var \Raven_Client
-     */
-    protected $client;
-
-    /**
      * @var Agent
      */
     protected $agent;
@@ -44,13 +45,8 @@ class ErrorHandler
      */
     public function initializeObject()
     {
-        $client = new \Raven_Client($this->dsn);
-        $errorHandler = new \Raven_ErrorHandler($client, true);
-        $errorHandler->registerShutdownFunction();
-        $this->client = $client;
+        initSentry(['dsn' => $this->dsn]);
         $this->agent = new Agent();
-
-        $this->setTagsContext();
     }
 
     /**
@@ -59,32 +55,23 @@ class ErrorHandler
      * @param object $exception The exception to capture
      * @param array $extraData Additional data passed to the Sentry sample
      */
-    public function handleException($exception, array $extraData = [])
+    public function handleException($exception, array $extraData = []): void
     {
-        if (!$this->client instanceof \Raven_Client) {
-            return;
-        }
-
         if (!$exception instanceof \Throwable) {
             // can`t handle anything different from \Exception and \Throwable
             return;
         }
 
-        $this->setUserContext();
-
-        $tags = ['code' => $exception->getCode()];
         if ($exception instanceof \Neos\Flow\Exception) {
             $extraData['referenceCode'] = $exception->getReferenceCode();
         }
 
-        $data = [
-            'message' => $exception->getMessage(),
-            'extra' => $extraData,
-            'tags' => $tags,
-        ];
-        $data = array_merge_recursive($data, $this->getBrowserContext(), $this->getOsContext());
+        $this->setExtraContext($extraData);
+        $this->setUserContext();
+        $this->setTagsContext(['code' => $exception->getCode()]);
+        $this->setReleaseContext();
 
-        $this->client->captureException($exception, $data);
+        captureException($exception);
     }
 
     protected function getBrowserContext(): array
@@ -112,26 +99,45 @@ class ErrorHandler
     }
 
     /**
-     * Set tags on the raven context
+     * Set extra on the sentry event scope
      */
-    protected function setTagsContext()
+    protected function setExtraContext(array $additionalExtraData): void
     {
-        $objectManager = Bootstrap::$staticObjectManager;
-        $environment = $objectManager->get(Environment::class);
+        $data = array_merge_recursive($additionalExtraData, $this->getBrowserContext(), $this->getOsContext());
 
-        $tags = [
-            'php_version' => phpversion(),
-            'flow_context' => (string)$environment->getContext(),
-            'flow_version' => FLOW_VERSION_BRANCH
-        ];
-
-        $this->client->tags_context($tags);
+        configureScope(function (Scope $scope) use ($data): void {
+            foreach ($data as $key => $value) {
+                $scope->setExtra($key, $value);
+            }
+        });
     }
 
     /**
-     * Set user information on the raven context
+     * Set tags on the sentry event scope
+     * @param array $additionalTags
      */
-    protected function setUserContext()
+    protected function setTagsContext(array $additionalTags): void
+    {
+        $objectManager = Bootstrap::$staticObjectManager;
+        $environment = $objectManager->get(Environment::class);
+        $tags = [
+            'php_version' => PHP_VERSION,
+            'flow_context' => (string)$environment->getContext(),
+            'flow_version' => FLOW_VERSION_BRANCH
+        ];
+        $tags = array_merge($tags, $additionalTags);
+
+        configureScope(function (Scope $scope) use ($tags): void {
+            foreach ($tags as $tagKey => $tagValue) {
+                $scope->setTag($tagKey, $tagValue);
+            }
+        });
+    }
+
+    /**
+     * Set user information on the sentry event scope
+     */
+    protected function setUserContext(): void
     {
         $objectManager = Bootstrap::$staticObjectManager;
         $securityContext = $objectManager->get(SecurityContext::class);
@@ -149,12 +155,22 @@ class ErrorHandler
             }
         }
 
-        if ($userContext !== []) {
-            $this->client->user_context($userContext);
-        }
+        configureScope(function (Scope $scope) use ($userContext): void {
+            if ($userContext !== []) {
+                $scope->setUser($userContext);
+            }
+        });
+    }
 
-        if ($this->release !== '') {
-            $this->client->setRelease($this->release);
+    /**
+     * Set release information as client option
+     */
+    protected function setReleaseContext(): void
+    {
+        $client = Hub::getCurrent()->getClient();
+        if ($this->release !== '' && $client) {
+            $options = $client->getOptions();
+            $options->setRelease($this->release);
         }
     }
 
@@ -164,14 +180,6 @@ class ErrorHandler
     public function injectSettings(array $settings)
     {
         $this->dsn = $settings['dsn'] ?? '';
-        $this->release = isset($settings['release']) ? $settings['release'] : '';
-    }
-
-    /**
-     * @return \Raven_Client
-     */
-    public function getClient()
-    {
-        return $this->client;
+        $this->release = $settings['release'] ?? '';
     }
 }
