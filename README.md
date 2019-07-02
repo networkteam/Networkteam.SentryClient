@@ -32,10 +32,10 @@ Add the following to your `Settings.yaml` and replace the `dsn` setting with you
     Networkteam:
       SentryClient:
         # The Sentry DSN
-        dsn: 'http://public_key:secret_key@your-sentry-server.com/project-id'
+        dsn: 'http://secret_key@your-sentry-server.com/project-id'
 
 You can implement the `\Networkteam\SentryClient\User\UserContextServiceInterface` to pass your own user context 
-information to the logging. If you do not have the TYPO3.Party Package and don't want to implement your own 
+information to the logging. If you do not have the Neos.Party Package and don't want to implement your own 
 `UserContextService` you need to set the `\Networkteam\SentryClient\User\DummyUserContext` in the Objects.yaml like
 
     Networkteam\SentryClient\User\UserContextServiceInterface:
