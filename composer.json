@@ -6,7 +6,8 @@
     "require": {
         "php": "~7.1",
         "neos/flow": ">=5.0.0",
-        "sentry/sdk": "^2.0"
+        "sentry/sdk": "^2.0",
+        "jenssegers/agent": "^2.6"
     },
     "autoload": {
         "psr-4": {
