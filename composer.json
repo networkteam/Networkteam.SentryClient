@@ -4,7 +4,7 @@
     "license": "MIT",
     "description": "A sentry client for the Flow framework",
     "require": {
-        "php": "~7.0",
+        "php": "~7.1",
         "neos/flow": ">=5.0.0",
         "sentry/sdk": "^2.0"
     },
