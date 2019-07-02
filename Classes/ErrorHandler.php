@@ -37,11 +37,11 @@ class ErrorHandler
     /**
      * @Flow\Inject
      * @var \Networkteam\SentryClient\Context\UserContextServiceInterface
-     */
+     */environment
     protected $userContextService;
 
     /**
-     * Initialize the raven client and fatal error handler (shutdown function)
+     * Initialize the sentry client and environment detection agent
      */
     public function initializeObject()
     {
@@ -100,6 +100,7 @@ class ErrorHandler
 
     /**
      * Set extra on the sentry event scope
+     * @param array $additionalExtraData
      */
     protected function setExtraContext(array $additionalExtraData): void
     {
