@@ -23,27 +23,23 @@ class PartyUserContext implements UserContextServiceInterface
      * Returns ContextData to be added to the sentry entry
      *
      * @param Context $securityContext
-     * @throws PropertyNotAccessibleException
      * @return array
+     * @throws PropertyNotAccessibleException
      */
     public function getUserContext(Context $securityContext)
     {
         $userContext = [];
         $account = $securityContext->getAccount();
-        if ($account) {
-            if (class_exists('Neos\Party\Domain\Repository\PartyRepository')) {
-                $partyRepository = $this->objectManager->get('Neos\Party\Domain\Repository\PartyRepository');
-                $party = $partyRepository->findOneHavingAccount($account);
-                if ($party instanceof \Neos\Party\Domain\Model\Person && $party->getPrimaryElectronicAddress() !== null) {
-                    $userContext['email'] = (string)$party->getPrimaryElectronicAddress();
-                } elseif ($party !== null && ObjectAccess::isPropertyGettable($party, 'emailAddress')) {
-                    $userContext['email'] = (string)ObjectAccess::getProperty($party, 'emailAddress');
-                }
-            } else {
-                $userContext['user'] = $account->getAccountIdentifier();
+        if ($account && class_exists('Neos\Party\Domain\Repository\PartyRepository')) {
+            $partyRepository = $this->objectManager->get('Neos\Party\Domain\Repository\PartyRepository');
+            $party = $partyRepository->findOneHavingAccount($account);
+            if ($party instanceof \Neos\Party\Domain\Model\Person && $party->getPrimaryElectronicAddress() !== null) {
+                $userContext['email'] = (string)$party->getPrimaryElectronicAddress();
+            } elseif ($party !== null && ObjectAccess::isPropertyGettable($party, 'emailAddress')) {
+                $userContext['email'] = (string)ObjectAccess::getProperty($party, 'emailAddress');
             }
         }
-
+        
         return $userContext;
     }
 }
