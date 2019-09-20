@@ -19,7 +19,7 @@ There was a failure in the versioning scheme for the client from 1.0.3 on. This 
 
 |    Flow         |SentryClient |
 |-----------------|-------------|
-|>= 5.0.0         | 5.x         |
+|>= 5.0.0         | >= 5.x      |
 |>= 4.0.0 < 5.0   | 4.x         |
 |>=2.3.9, >=3.0.3 | 3.x, >1.0.3 |
 |<2.3.9, <3.0.3   | 2.x, <1.0.3 |
