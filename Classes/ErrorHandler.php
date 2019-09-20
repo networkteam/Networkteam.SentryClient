@@ -37,7 +37,7 @@ class ErrorHandler
     /**
      * @Flow\Inject
      * @var \Networkteam\SentryClient\Context\UserContextServiceInterface
-     */environment
+     */
     protected $userContextService;
 
     /**
