@@ -2,41 +2,48 @@
 namespace Networkteam\SentryClient\Context;
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 use Neos\Flow\Security\Context;
-use Neos\Party\Domain\Model\Person;
-use Neos\Party\Domain\Repository\PartyRepository;
+use Neos\Utility\Exception\PropertyNotAccessibleException;
 use Neos\Utility\ObjectAccess;
 
 class PartyUserContext implements UserContextServiceInterface
 {
-
     /**
-     * @Flow\Inject
-     * @var PartyRepository
+     * @var ObjectManagerInterface
      */
-    protected $partyRepository;
+    protected $objectManager;
+
+    public function __construct(ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
 
     /**
      * Returns ContextData to be added to the sentry entry
      *
      * @param Context $securityContext
+     * @throws PropertyNotAccessibleException
      * @return array
      */
     public function getUserContext(Context $securityContext)
     {
+        $userContext = [];
         $account = $securityContext->getAccount();
         if ($account) {
-            $party = $this->partyRepository->findOneHavingAccount($account);
-            $userContext = [];
-            if ($party instanceof Person && $party->getPrimaryElectronicAddress() !== null) {
-                $userContext['email'] = (string)$party->getPrimaryElectronicAddress();
-            } elseif ($party !== null && ObjectAccess::isPropertyGettable($party, 'emailAddress')) {
-                $userContext['email'] = (string)ObjectAccess::getProperty($party, 'emailAddress');
+            if (class_exists('Neos\Party\Domain\Repository\PartyRepository')) {
+                $partyRepository = $this->objectManager->get('Neos\Party\Domain\Repository\PartyRepository');
+                $party = $partyRepository->findOneHavingAccount($account);
+                if ($party instanceof \Neos\Party\Domain\Model\Person && $party->getPrimaryElectronicAddress() !== null) {
+                    $userContext['email'] = (string)$party->getPrimaryElectronicAddress();
+                } elseif ($party !== null && ObjectAccess::isPropertyGettable($party, 'emailAddress')) {
+                    $userContext['email'] = (string)ObjectAccess::getProperty($party, 'emailAddress');
+                }
+            } else {
+                $userContext['user'] = $account->getAccountIdentifier();
             }
-
-            return $userContext;
         }
 
-        return [];
+        return $userContext;
     }
 }

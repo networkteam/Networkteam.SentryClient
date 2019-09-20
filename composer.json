@@ -4,10 +4,10 @@
     "license": "MIT",
     "description": "A sentry client for the Flow framework",
     "require": {
-        "php": "~7.0",
+        "php": "~7.1",
         "neos/flow": ">=5.0.0",
-        "sentry/sentry": "^1.2",
-        "jenssegers/agent": "~2.6"
+        "sentry/sdk": "^2.0",
+        "jenssegers/agent": "^2.6"
     },
     "autoload": {
         "psr-4": {
