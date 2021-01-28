@@ -7,10 +7,10 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Core\Bootstrap;
 use Neos\Flow\Security\Context as SecurityContext;
 use Neos\Flow\Utility\Environment;
+use Sentry\SentrySdk;
 use function Sentry\captureException;
 use function Sentry\configureScope;
 use function Sentry\init as initSentry;
-use Sentry\State\Hub;
 use Sentry\State\Scope;
 
 /**
@@ -168,7 +168,7 @@ class ErrorHandler
      */
     protected function setReleaseContext(): void
     {
-        $client = Hub::getCurrent()->getClient();
+        $client = SentrySdk::getCurrentHub()->getClient();
         if ($this->release !== '' && $client) {
             $options = $client->getOptions();
             $options->setRelease($this->release);
