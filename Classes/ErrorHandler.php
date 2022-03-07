@@ -45,7 +45,19 @@ class ErrorHandler
      */
     public function initializeObject()
     {
-        initSentry(['dsn' => $this->dsn]);
+        initSentry([
+            'dsn' => $this->dsn,
+            'integrations' => static function (array $integrations) {
+                $integrations = array_filter($integrations, static function (\Sentry\Integration\IntegrationInterface $integration) {
+                    // Prevent reporting exceptions twice
+                    if ($integration instanceof \Sentry\Integration\ExceptionListenerIntegration) {
+                        return false;
+                    }
+                    return true;
+                });
+                return $integrations;
+            },
+        ]);
         $this->agent = new Agent();
     }
 
