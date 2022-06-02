@@ -21,10 +21,10 @@ class DebugExceptionHandler extends DebugExceptionHandlerBase
     /**
      * {@inheritdoc}
      */
-    public function echoExceptionCLI(\Throwable $exception)
+    public function echoExceptionCLI(\Throwable $exception, bool $exceptionWasLogged)
     {
         $this->sendExceptionToSentry($exception);
-        parent::echoExceptionCLI($exception);
+        parent::echoExceptionCLI($exception, $exceptionWasLogged);
     }
 
     /**
