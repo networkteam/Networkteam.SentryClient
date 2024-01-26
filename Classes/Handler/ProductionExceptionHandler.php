@@ -3,6 +3,7 @@ namespace Networkteam\SentryClient\Handler;
 
 use Neos\Flow\Core\Bootstrap;
 use Neos\Flow\Error\ProductionExceptionHandler as ProductionExceptionHandlerBase;
+use Neos\Flow\Log\ThrowableStorageInterface;
 use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 use Networkteam\SentryClient\ErrorHandler;
 
@@ -10,21 +11,33 @@ class ProductionExceptionHandler extends ProductionExceptionHandlerBase
 {
 
     /**
-     * {@inheritdoc}
+     * Handles the given exception
+     *
+     * @param \Throwable $exception The exception object
+     * @return void
      */
-    public function echoExceptionWeb($exception)
+    public function handleException($exception)
     {
-        $this->sendExceptionToSentry($exception);
-        parent::echoExceptionWeb($exception);
-    }
+        // Ignore if the error is suppressed by using the shut-up operator @
+        if (error_reporting() === 0) {
+            return;
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function echoExceptionCLI(\Throwable $exception, bool $exceptionWasLogged)
-    {
-        $this->sendExceptionToSentry($exception);
-        parent::echoExceptionCLI($exception, $exceptionWasLogged);
+        $this->renderingOptions = $this->resolveCustomRenderingOptions($exception);
+        $eventId = $this->sendExceptionToSentry($exception);
+
+        $exceptionWasLogged = false;
+        if ($this->throwableStorage instanceof ThrowableStorageInterface && isset($this->renderingOptions['logException']) && $this->renderingOptions['logException']) {
+            $message = $this->throwableStorage->logThrowable($exception, ['sentryEventId' => $eventId]);
+            $this->logger->critical($message);
+            $exceptionWasLogged = true;
+        }
+
+        if (PHP_SAPI === 'cli') {
+            $this->echoExceptionCli($exception, $exceptionWasLogged);
+        }
+
+        $this->echoExceptionWeb($exception);
     }
 
     /**
@@ -34,26 +47,26 @@ class ProductionExceptionHandler extends ProductionExceptionHandlerBase
      * not cause errors.
      *
      * @param \Throwable $exception The throwable
+     * @return string EventId
      */
-    protected function sendExceptionToSentry($exception)
+    protected function sendExceptionToSentry($exception): ?string
     {
         if (!Bootstrap::$staticObjectManager instanceof ObjectManagerInterface) {
-            return;
+            return null;
         }
 
-        $options = $this->resolveCustomRenderingOptions($exception);
-        $logException = $options['logException'] ?? false;
-        $sentryClientIgnoreException = $options['sentryClientIgnoreException'] ?? false;
+        $logException = $this->renderingOptions['logException'] ?? false;
+        $sentryClientIgnoreException = $this->renderingOptions['sentryClientIgnoreException'] ?? false;
         if ($logException && !$sentryClientIgnoreException) {
             try {
                 $errorHandler = Bootstrap::$staticObjectManager->get(ErrorHandler::class);
                 if ($errorHandler !== null) {
-                    $errorHandler->handleException($exception);
+                    return $errorHandler->handleException($exception);
                 }
             } catch (\Exception $exception) {
                 // Quick'n dirty workaround to catch exception with the error handler is called during compile time
             }
         }
+        return null;
     }
-
 }
