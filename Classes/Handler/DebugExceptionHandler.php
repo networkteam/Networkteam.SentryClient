@@ -6,6 +6,7 @@ use Neos\Flow\Error\DebugExceptionHandler as DebugExceptionHandlerBase;
 use Neos\Flow\Log\ThrowableStorageInterface;
 use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 use Networkteam\SentryClient\ErrorHandler;
+use Networkteam\Util\Log\ThrowableStorage\ConsoleStorage;
 
 class DebugExceptionHandler extends DebugExceptionHandlerBase
 {
@@ -27,7 +28,11 @@ class DebugExceptionHandler extends DebugExceptionHandlerBase
 
         $exceptionWasLogged = false;
         if ($this->throwableStorage instanceof ThrowableStorageInterface && isset($this->renderingOptions['logException']) && $this->renderingOptions['logException']) {
-            $this->throwableStorage->logThrowable($exception, ['sentryEventId' => $eventId]);
+            $message = $this->throwableStorage->logThrowable($exception, ['sentryEventId' => $eventId]);
+            // ConsoleStorage logs json to the console like the other loggers, so do not log twice.
+            if (!$this->throwableStorage instanceof ConsoleStorage) {
+                $this->logger->critical($message);
+            }
             $exceptionWasLogged = true;
         }
 

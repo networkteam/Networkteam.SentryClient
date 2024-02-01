@@ -6,6 +6,7 @@ use Neos\Flow\Error\ProductionExceptionHandler as ProductionExceptionHandlerBase
 use Neos\Flow\Log\ThrowableStorageInterface;
 use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 use Networkteam\SentryClient\ErrorHandler;
+use Networkteam\Util\Log\ThrowableStorage\ConsoleStorage;
 
 class ProductionExceptionHandler extends ProductionExceptionHandlerBase
 {
@@ -28,7 +29,11 @@ class ProductionExceptionHandler extends ProductionExceptionHandlerBase
 
         $exceptionWasLogged = false;
         if ($this->throwableStorage instanceof ThrowableStorageInterface && isset($this->renderingOptions['logException']) && $this->renderingOptions['logException']) {
-            $this->throwableStorage->logThrowable($exception, ['sentryEventId' => $eventId]);
+            $message = $this->throwableStorage->logThrowable($exception, ['sentryEventId' => $eventId]);
+            // Our ConsoleStorage logs json to the console like the other loggers, so do not log twice.
+            if (!$this->throwableStorage instanceof ConsoleStorage) {
+                $this->logger->critical($message);
+            }
             $exceptionWasLogged = true;
         }
 
