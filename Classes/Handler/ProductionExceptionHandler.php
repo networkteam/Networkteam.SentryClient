@@ -28,8 +28,7 @@ class ProductionExceptionHandler extends ProductionExceptionHandlerBase
 
         $exceptionWasLogged = false;
         if ($this->throwableStorage instanceof ThrowableStorageInterface && isset($this->renderingOptions['logException']) && $this->renderingOptions['logException']) {
-            $message = $this->throwableStorage->logThrowable($exception, ['sentryEventId' => $eventId]);
-            $this->logger->critical($message);
+            $this->throwableStorage->logThrowable($exception, ['sentryEventId' => $eventId]);
             $exceptionWasLogged = true;
         }
 
