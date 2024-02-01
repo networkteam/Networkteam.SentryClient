@@ -7,6 +7,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Core\Bootstrap;
 use Neos\Flow\Security\Context as SecurityContext;
 use Neos\Flow\Utility\Environment;
+use Sentry\EventId;
 use Sentry\SentrySdk;
 use function Sentry\captureException;
 use function Sentry\configureScope;
@@ -67,11 +68,11 @@ class ErrorHandler
      * @param object $exception The exception to capture
      * @param array $extraData Additional data passed to the Sentry sample
      */
-    public function handleException($exception, array $extraData = []): void
+    public function handleException($exception, array $extraData = []): ?string
     {
         if (!$exception instanceof \Throwable) {
             // can`t handle anything different from \Exception and \Throwable
-            return;
+            return null;
         }
 
         if ($exception instanceof \Neos\Flow\Exception) {
@@ -83,7 +84,11 @@ class ErrorHandler
         $this->setTagsContext(['code' => $exception->getCode()]);
         $this->setReleaseContext();
 
-        captureException($exception);
+        $eventId = captureException($exception);
+        if ($eventId instanceof EventId) {
+            $eventId = $eventId->__toString();
+        }
+        return $eventId;
     }
 
     protected function getBrowserContext(): array
