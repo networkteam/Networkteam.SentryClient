@@ -39,3 +39,8 @@ Neos:
             matchingStatusCodes: [403]
             options:
               sentryClientIgnoreException: true
+
+          # "The given string was not appended with a valid HMAC"
+          noStacktraceExceptionGroup:
+            options:
+              sentryClientIgnoreException: true
