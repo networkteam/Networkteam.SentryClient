@@ -7,6 +7,9 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Core\Bootstrap;
 use Neos\Flow\Security\Context as SecurityContext;
 use Neos\Flow\Utility\Environment;
+use Sentry\Integration\ErrorListenerIntegration;
+use Sentry\Integration\ExceptionListenerIntegration;
+use Sentry\Integration\IntegrationInterface;
 use Sentry\SentrySdk;
 use function Sentry\captureException;
 use function Sentry\configureScope;
@@ -18,7 +21,6 @@ use Sentry\State\Scope;
  */
 class ErrorHandler
 {
-
     /**
      * @var string
      */
@@ -45,19 +47,27 @@ class ErrorHandler
      */
     public function initializeObject()
     {
-        initSentry([
+        $sentryOptions = [
             'dsn' => $this->dsn,
             'integrations' => static function (array $integrations) {
-                $integrations = array_filter($integrations, static function (\Sentry\Integration\IntegrationInterface $integration) {
+                return array_filter($integrations, static function (IntegrationInterface $integration) {
                     // Prevent reporting exceptions twice
-                    if ($integration instanceof \Sentry\Integration\ExceptionListenerIntegration) {
+                    if ($integration instanceof ExceptionListenerIntegration) {
                         return false;
                     }
+
+                    // Prevent reporting php_errors by sentry. Let Flow take care of ErrorExceptions
+                    if ($integration instanceof ErrorListenerIntegration) {
+                        return false;
+                    }
+
                     return true;
                 });
-                return $integrations;
             },
-        ]);
+            'prefixes' => [FLOW_PATH_ROOT]
+        ];
+
+        initSentry($sentryOptions);
         $this->agent = new Agent();
     }
 
