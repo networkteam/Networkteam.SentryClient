@@ -39,3 +39,8 @@ Neos:
             matchingStatusCodes: [403]
             options:
               sentryClientIgnoreException: true
+
+          badRequestExceptions:
+            matchingStatusCodes: [400]
+            options:
+              sentryClientIgnoreException: true
