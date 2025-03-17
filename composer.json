@@ -6,7 +6,7 @@
     "require": {
         "php": "~7.1 || ~8.0",
         "neos/flow": ">=7.3.6",
-        "sentry/sdk": "^2.2 || ^3.0",
+        "sentry/sentry": "^4.10",
         "jenssegers/agent": "^2.6"
     },
     "autoload": {

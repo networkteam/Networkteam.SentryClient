@@ -72,7 +72,7 @@ class ErrorHandler
     }
 
     /**
-     * Explicitly handle an exception, should be called from an exception handler (in Flow or TypoScript)
+     * Explicitly handle an exception, should be called from an exception handler (in Flow or Fusion)
      *
      * @param object $exception The exception to capture
      * @param array $extraData Additional data passed to the Sentry sample
